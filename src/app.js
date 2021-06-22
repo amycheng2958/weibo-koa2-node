@@ -6,8 +6,11 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 
-const index = require('./routes/index')
-const users = require('./routes/users')
+// 页面路由
+const userViewRouter = require('./routes/view/user')
+const errorViewRouter = require('./routes/view/error')
+// api路由
+const userAPIRouter = require('./routes/api/user')
 
 // error handler
 onerror(app)
@@ -33,8 +36,9 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
+app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
+app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods()) // 404路由注册放在最后
 
 // error-handling
 app.on('error', (err, ctx) => {
